@@ -21,12 +21,6 @@ extern "C" {
  * OpenSSL was configured with the following options:
  */
 
-#ifndef OPENSSL_NO_MD2
-# define OPENSSL_NO_MD2
-#endif
-#ifndef OPENSSL_NO_RC5
-# define OPENSSL_NO_RC5
-#endif
 #ifndef OPENSSL_THREADS
 # define OPENSSL_THREADS
 #endif
@@ -74,12 +68,6 @@ extern "C" {
 #endif
 #ifndef OPENSSL_NO_SSL_TRACE
 # define OPENSSL_NO_SSL_TRACE
-#endif
-#ifndef OPENSSL_NO_SSL3
-# define OPENSSL_NO_SSL3
-#endif
-#ifndef OPENSSL_NO_SSL3_METHOD
-# define OPENSSL_NO_SSL3_METHOD
 #endif
 #ifndef OPENSSL_NO_UBSAN
 # define OPENSSL_NO_UBSAN

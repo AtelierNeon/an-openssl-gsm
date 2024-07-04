@@ -23,16 +23,28 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-cmake_minimum_required( VERSION 3.1.0 )
+cmake_minimum_required( VERSION 3.1.0...3.15.0 )
 set( CMAKE_LEGACY_CYGWIN_WIN32 0 )
-project( openssl )
+project( openssl
+  DESCRIPTION "OpenSSL" )
+
+option( OPENSSL_WITH_DEPRECATED_CIPHERS "Build OpenSSL with deprecated ciphers." OFF )
+option( OPENSSL_WITH_SHARED_LIBRARIES "Build shared version of the libcrypto/libssl libraries." OFF )
+option( OPENSSL_WITH_SHARED_ZLIB "Build OpenSSL with shared version of Zlib." OFF )
+option( OPENSSL_WITH_ZLIB "Build OpenSSL with Zlib." OFF )
+option( OPENSSL_WITHOUT_APPS "Build OpenSSL without apps." OFF )
+
+set( BUILD_SHARED_LIBS ${OPENSSL_WITH_SHARED_LIBRARIES} )
 
 set( CMAKE_DISABLE_SOURCE_CHANGES ON )
 set( CMAKE_DISABLE_IN_SOURCE_BUILD ON )
 
-set( CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" )
+list( APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" )
 
 option( WITH_APPS "Build applications" ON )
+if( OPENSSL_WITHOUT_APPS )
+  set( WITH_APPS OFF )
+endif()
 
 # OpenSSL version detection imported from FindOpenSSL.cmake
 
@@ -102,14 +114,30 @@ set( LIB_SOVERSION ${VERSION_MAJOR}.${VERSION_MINOR} )
 add_definitions( -DOPENSSL_NO_ASM )
 add_definitions( -DOPENSSL_NO_STATIC_ENGINE )
 
+if( OPENSSL_WITH_SHARED_ZLIB )
+  set( OPENSSL_WITH_ZLIB ON )
+endif()
+if( OPENSSL_WITH_ZLIB AND NOT OPENSSL_WITH_SHARED_ZLIB )
+  set(ZLIB_USE_STATIC_LIBS ON)
+endif()
+find_package( SiblingZLIB )
+if( NOT ZLIB_FOUND )
+  find_package( ZLIB )
+endif()
+
 if( MSVC )
   include( MSVCRuntime )
   configure_msvc_runtime()
-  set( OPENSSLDIR "C:/ssl" )
-  set( ENGINESDIR "C:/engines-1.1" )
+  set( OPENSSLDIR "C:/ProgramData/openssl/ssl" )
+  set( ENGINESDIR "C:/ProgramData/openssl/engines-1.1" )
 else()
-  set( OPENSSLDIR "${CMAKE_INSTALL_PREFIX}/ssl" )
-  set( ENGINESDIR "${CMAKE_INSTALL_PREFIX}/engines-1.1" )
+  if( DEFINED MY_LIB_BASE_PATH )
+    set( OPENSSLDIR "${MY_LIB_BASE_PATH}/ssl" )
+    set( ENGINESDIR "${MY_LIB_BASE_PATH}/engines-1.1" )
+  else()
+    set( OPENSSLDIR "${CMAKE_INSTALL_PREFIX}/ssl" )
+    set( ENGINESDIR "${CMAKE_INSTALL_PREFIX}/engines-1.1" )
+  endif()
 endif()
 add_definitions( "-DOPENSSLDIR=\"${OPENSSLDIR}\"" )
 add_definitions( "-DENGINESDIR=\"${ENGINESDIR}\"" )
@@ -122,6 +150,8 @@ endif()
 if( WIN32 )
   set( CMAKE_SHARED_LIBRARY_PREFIX "lib" )
   set( CMAKE_STATIC_LIBRARY_PREFIX "lib" )
+else()
+  set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 endif()
 
 if( WIN32 AND NOT CYGWIN )
@@ -162,11 +192,22 @@ file( COPY ${PROJECT_SOURCE_DIR}/include/openssl DESTINATION include )
 
 file( READ ${PROJECT_SOURCE_DIR}/opensslconf.h.cmake CONF )
 set( CONF "
-#define OPENSSL_NO_MD2
-#define OPENSSL_NO_RC5
 #define OPENSSL_NO_RFC3779
 #define OPENSSL_NO_EC_NISTP_64_GCC_128
 ${CONF}" )
+if( NOT OPENSSL_WITH_DEPRECATED_CIPHERS )
+set( CONF "
+#define OPENSSL_NO_MD2
+#define OPENSSL_NO_RC5
+#define OPENSSL_NO_SSL3
+#define OPENSSL_NO_SSL3_METHOD
+${CONF}" )
+endif()
+if( OPENSSL_WITH_ZLIB AND ZLIB_FOUND )
+set( CONF "
+#define ZLIB
+${CONF}" )
+endif()
 file( WRITE ${PROJECT_BINARY_DIR}/opensslconf.h.cmake "${CONF}" )
 
 configure_file( ${PROJECT_BINARY_DIR}/opensslconf.h.cmake

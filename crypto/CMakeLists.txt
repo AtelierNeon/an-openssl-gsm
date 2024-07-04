@@ -67,6 +67,12 @@ include_directories( BEFORE SYSTEM
   ${PROJECT_BINARY_DIR}/include # public|crypto|internal
   ${PROJECT_SOURCE_DIR}/ # e_os.h
 )
+if( OPENSSL_WITH_ZLIB )
+  include_directories(
+    ${PROJECT_SOURCE_DIR}/../zlib/
+    ${PROJECT_BINARY_DIR}/../zlib/
+  )
+endif()
 
 if( BUILD_SHARED_LIBS )
   add_definitions( -DOPENSSL_BUILD_SHLIBCRYPTO )
@@ -110,7 +116,7 @@ add_submodule ( async async.c async_err.c async_wait.c
 
 add_submodule ( bf bf_cfb64.c bf_ecb.c bf_enc.c bf_ofb64.c bf_skey.c )
 
-add_submodule ( bio b_addr.c b_dump.c b_print.c b_sock.c b_sock2.c bf_buff.c #bf_lbuf.c
+add_submodule ( bio b_addr.c b_dump.c b_print.c b_sock.c b_sock2.c bf_buff.c bf_lbuf.c
   bf_nbio.c bf_null.c bio_cb.c bio_err.c bio_lib.c bio_meth.c bss_acpt.c bss_bio.c
   bss_conn.c bss_dgram.c bss_fd.c bss_file.c bss_log.c bss_mem.c bss_null.c bss_sock.c )
 
@@ -188,6 +194,10 @@ add_submodule ( kdf hkdf.c kdf_err.c scrypt.c tls1_prf.c )
 
 add_submodule ( lhash lh_stats.c lhash.c )
 
+if( OPENSSL_WITH_DEPRECATED_CIPHERS )
+  add_submodule ( md2 md2_dgst.c md2_one.c )
+endif()
+
 add_submodule ( md4 md4_dgst.c md4_one.c )
 
 add_submodule ( md5 md5_dgst.c md5_one.c )
@@ -221,7 +231,9 @@ add_submodule ( rc2 rc2_cbc.c rc2_ecb.c rc2_skey.c rc2cfb64.c rc2ofb64.c )
 
 add_submodule ( rc4 rc4_enc.c rc4_skey.c )
 
-#add_submodule ( rc5 rc5_ecb.c rc5_enc.c rc5_skey.c rc5cfb64.c rc5ofb64.c )
+if( OPENSSL_WITH_DEPRECATED_CIPHERS )
+  add_submodule ( rc5 rc5_ecb.c rc5_enc.c rc5_skey.c rc5cfb64.c rc5ofb64.c )
+endif()
 
 add_submodule ( ripemd rmd_dgst.c rmd_one.c )
 
@@ -275,7 +287,24 @@ if( NOT Threads_FOUND )
 elseif( WIN32 )
   add_submodule ( . threads_win.c )
 else()
+  string(APPEND CMAKE_THREAD_LIBS_INIT "-lpthread")
+  string(APPEND CMAKE_C_FLAGS "-pthread")
+  string(APPEND CMAKE_CXX_FLAGS "-pthread")
   add_submodule ( . threads_pthread.c )
+endif()
+
+if( WIN32 )
+  include( Windows-MyDllVersion )
+  generate_product_dll_version( OPENSSL_CRYPTO_VERSION_FILES
+    NAME "libcrypto - OpenSSL cryptographic library"
+    BUNDLE "${PROJECT_DESCRIPTION}"
+    VERSION_MAJOR ${OPENSSL_VERSION_MAJOR}
+    VERSION_MINOR ${OPENSSL_VERSION_MINOR}
+    VERSION_PATCH ${OPENSSL_VERSION_FIX}
+    VERSION_REVISION ${MY_REVISION}
+    ORIGINAL_FILENAME "libcrypto-1_1.dll"
+  )
+  set( LIBSRC ${LIBSRC} ${OPENSSL_CRYPTO_VERSION_FILES} )
 endif()
 
 add_library( crypto ${LIBSRC} ${OBJECTS_SRC} )
@@ -283,7 +312,7 @@ add_library( crypto ${LIBSRC} ${OBJECTS_SRC} )
 target_include_directories( crypto PUBLIC ${PROJECT_BINARY_DIR}/include )
 
 if( WIN32 AND NOT CYGWIN )
-  target_link_libraries( crypto ws2_32 crypt32 )
+  target_link_libraries( crypto ws2_32 crypt32 advapi32 )
 else()
   if( Threads_FOUND )
     target_link_libraries( crypto ${CMAKE_THREAD_LIBS_INIT} )
@@ -293,6 +322,10 @@ else()
   endif()
 endif()
 
+if( OPENSSL_WITH_ZLIB AND ZLIB_FOUND )
+  target_link_libraries( crypto ${ZLIB_LIBRARIES} )
+endif()
+
 set_target_properties( crypto PROPERTIES
   VERSION "${LIB_VERSION}" SOVERSION "${LIB_SOVERSION}" )
 
@@ -300,7 +333,7 @@ if( ANDROID )
   set_target_properties( crypto PROPERTIES OUTPUT_NAME "crypto_1_1" )
 elseif( MSVC )
   if( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-    set_target_properties( crypto PROPERTIES OUTPUT_NAME "crypto-1_1-x64" )
+    set_target_properties( crypto PROPERTIES OUTPUT_NAME "crypto-1_1" )
   elseif( CMAKE_SIZEOF_VOID_P EQUAL 4 )
     set_target_properties( crypto PROPERTIES OUTPUT_NAME "crypto-1_1" )
   endif()
