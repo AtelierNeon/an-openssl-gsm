@@ -341,7 +341,9 @@ else()
   set_target_properties( crypto PROPERTIES OUTPUT_NAME "crypto" )
 endif()
 
-install( TARGETS crypto
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib )
+if( NOT OPENSSL_WITHOUT_INSTALL_LIBRARIES )
+  install( TARGETS crypto
+      RUNTIME DESTINATION bin
+      LIBRARY DESTINATION lib
+      ARCHIVE DESTINATION lib )
+endif()

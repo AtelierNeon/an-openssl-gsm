@@ -78,7 +78,9 @@ else()
   set_target_properties( ssl PROPERTIES OUTPUT_NAME "ssl" )
 endif()
 
-install( TARGETS ssl
-    RUNTIME DESTINATION bin
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib )
+if( NOT OPENSSL_WITHOUT_INSTALL_LIBRARIES )
+  install( TARGETS ssl
+      RUNTIME DESTINATION bin
+      LIBRARY DESTINATION lib
+      ARCHIVE DESTINATION lib )
+endif()

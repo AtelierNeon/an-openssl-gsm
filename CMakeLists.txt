@@ -33,6 +33,10 @@ option( OPENSSL_WITH_SHARED_LIBRARIES "Build shared version of the libcrypto/lib
 option( OPENSSL_WITH_SHARED_ZLIB "Build OpenSSL with shared version of Zlib." OFF )
 option( OPENSSL_WITH_ZLIB "Build OpenSSL with Zlib." OFF )
 option( OPENSSL_WITHOUT_APPS "Build OpenSSL without apps." OFF )
+option( OPENSSL_WITHOUT_INSTALL_ALL "Build OpenSSL without installing all artifacts." OFF)
+option( OPENSSL_WITHOUT_INSTALL_FILES "Build OpenSSL without installing files." OFF)
+option( OPENSSL_WITHOUT_INSTALL_HEADERS "Build OpenSSL without installing headers." OFF)
+option( OPENSSL_WITHOUT_INSTALL_LIBRARIES "Build OpenSSL without installing libraries." OFF)
 
 set( BUILD_SHARED_LIBS ${OPENSSL_WITH_SHARED_LIBRARIES} )
 
@@ -225,24 +229,30 @@ if( WITH_APPS AND NOT ANDROID AND NOT IOS )
   string( REPLACE "@CMAKE_INSTALL_PREFIX@" "${CMAKE_INSTALL_PREFIX}" C_REHASH "${C_REHASH}" )
   file( WRITE ${PROJECT_BINARY_DIR}/c_rehash "${C_REHASH}" )
 
-  install( FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/apps/openssl.cnf
-    ${CMAKE_CURRENT_SOURCE_DIR}/apps/ct_log_list.cnf
-    DESTINATION ssl )
-  install( CODE "FILE(MAKE_DIRECTORY \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/ssl/certs)" )
-  install( CODE "FILE(MAKE_DIRECTORY \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/ssl/misc)" )
-  install( CODE "FILE(MAKE_DIRECTORY \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/ssl/private)" )
-  install( FILES ${PROJECT_BINARY_DIR}/c_rehash DESTINATION bin )
+  if( NOT OPENSSL_WITHOUT_INSTALL_FILES )
+    install( FILES
+      ${CMAKE_CURRENT_SOURCE_DIR}/apps/openssl.cnf
+      ${CMAKE_CURRENT_SOURCE_DIR}/apps/ct_log_list.cnf
+      DESTINATION ssl )
+    install( CODE "FILE(MAKE_DIRECTORY \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/ssl/certs)" )
+    install( CODE "FILE(MAKE_DIRECTORY \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/ssl/misc)" )
+    install( CODE "FILE(MAKE_DIRECTORY \$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/ssl/private)" )
+    install( FILES ${PROJECT_BINARY_DIR}/c_rehash DESTINATION bin )
+  endif()
 endif()
 
-file( GLOB PUBLIC_HEADERS "${PROJECT_BINARY_DIR}/include/openssl/*.h" )
-install( FILES ${PUBLIC_HEADERS} DESTINATION include/openssl )
+if( OPENSSL_WITHOUT_INSTALL_HEADERS )
+  file( GLOB PUBLIC_HEADERS "${PROJECT_BINARY_DIR}/include/openssl/*.h" )
+  install( FILES ${PUBLIC_HEADERS} DESTINATION include/openssl )
+endif()
 
-install( FILES
-  FAQ LICENSE README README.ENGINE
-  DESTINATION share/openssl )
+if( NOT OPENSSL_WITHOUT_INSTALL_FILES )
+  install( FILES
+    FAQ LICENSE README README.ENGINE
+    DESTINATION share/openssl )
 
-install( DIRECTORY doc DESTINATION share )
+  install( DIRECTORY doc DESTINATION share )
+endif()
 
 set( prefix      "${CMAKE_INSTALL_PREFIX}" )
 set( includedir  "include" )
@@ -250,8 +260,10 @@ set( libdir      "lib" )
 get_target_property( libcrypto crypto OUTPUT_NAME )
 get_target_property( libssl ssl OUTPUT_NAME )
 configure_file(openssl.pc.in.cmake openssl.pc @ONLY)
-install (FILES ${CMAKE_CURRENT_BINARY_DIR}/openssl.pc
-  DESTINATION lib/pkgconfig)
+if( NOT OPENSSL_WITHOUT_INSTALL_FILES )
+  install (FILES ${CMAKE_CURRENT_BINARY_DIR}/openssl.pc
+    DESTINATION lib/pkgconfig)
+endif()
 
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
