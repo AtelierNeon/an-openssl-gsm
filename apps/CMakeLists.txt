@@ -50,7 +50,19 @@ include_directories( BEFORE SYSTEM
 
 if( WIN32 )
   list( APPEND E_SRC win32_init.c )
-endif()
+  include( Windows-MyExeVersion )
+  generate_product_exe_version( OPENSSL_APP_VERSION_FILES
+    NAME "openssl - OpenSSL command line program"
+    BUNDLE "${PROJECT_DESCRIPTION}"
+    ICON ${PROJECT_SOURCE_DIR}/openssl.ico
+    VERSION_MAJOR ${OPENSSL_VERSION_MAJOR}
+    VERSION_MINOR ${OPENSSL_VERSION_MINOR}
+    VERSION_PATCH ${OPENSSL_VERSION_FIX}
+    VERSION_REVISION ${MY_REVISION}
+    ORIGINAL_FILENAME "openssl.exe"
+  )
+  set( E_SRC ${E_SRC} ${OPENSSL_APP_VERSION_FILES} )
+endif ()
 
 add_executable( openssl ${E_SRC} )
 
@@ -62,10 +74,14 @@ if( ${CMAKE_SYSTEM_NAME} STREQUAL "SunOS" )
   target_link_libraries( openssl socket nsl )
 endif()
 
-install( TARGETS openssl
-    RUNTIME DESTINATION bin )
+if( NOT OPENSSL_WITHOUT_INSTALL_LIBRARIES AND NOT OPENSSL_WITHOUT_INSTALL_ALL )
+  install( TARGETS openssl
+      RUNTIME DESTINATION bin )
+endif()
 
-install( FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/CA.pl
-  ${CMAKE_CURRENT_BINARY_DIR}/tsget
-  DESTINATION share/openssl )
+if( NOT OPENSSL_WITHOUT_INSTALL_FILES AND NOT OPENSSL_WITHOUT_INSTALL_ALL )
+  install( FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/CA.pl
+    ${CMAKE_CURRENT_BINARY_DIR}/tsget
+    DESTINATION share/openssl )
+endif()
