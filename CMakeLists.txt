@@ -31,6 +31,7 @@ project( openssl
 option( OPENSSL_WITH_DEPRECATED_CIPHERS "Build OpenSSL with deprecated ciphers." OFF )
 option( OPENSSL_WITH_SHARED_LIBRARIES "Build shared version of the libcrypto/libssl libraries." OFF )
 option( OPENSSL_WITH_SHARED_ZLIB "Build OpenSSL with shared version of Zlib." OFF )
+option( OPENSSL_WITH_WEAK_SSL_CIPHERS "Build OpenSSL with weak SSL ciphers." OFF )
 option( OPENSSL_WITH_ZLIB "Build OpenSSL with Zlib." OFF )
 option( OPENSSL_WITHOUT_APPS "Build OpenSSL without apps." OFF )
 option( OPENSSL_WITHOUT_INSTALL_ALL "Build OpenSSL without installing all artifacts." OFF)
@@ -213,6 +214,11 @@ set( CONF "
 #define OPENSSL_NO_RC5
 #define OPENSSL_NO_SSL3
 #define OPENSSL_NO_SSL3_METHOD
+${CONF}" )
+endif()
+if( NOT OPENSSL_WITH_WEAK_SSL_CIPHERS )
+set( CONF "
+#define OPENSSL_NO_WEAK_SSL_CIPHERS
 ${CONF}" )
 endif()
 if( OPENSSL_WITH_ZLIB AND ZLIB_FOUND )

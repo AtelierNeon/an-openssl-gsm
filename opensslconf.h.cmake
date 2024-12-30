@@ -75,9 +75,6 @@ extern "C" {
 #ifndef OPENSSL_NO_UNIT_TEST
 # define OPENSSL_NO_UNIT_TEST
 #endif
-#ifndef OPENSSL_NO_WEAK_SSL_CIPHERS
-# define OPENSSL_NO_WEAK_SSL_CIPHERS
-#endif
 #ifndef OPENSSL_NO_STATIC_ENGINE
 # define OPENSSL_NO_STATIC_ENGINE
 #endif
