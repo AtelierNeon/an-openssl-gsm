@@ -31,6 +31,7 @@ project( openssl
 option( OPENSSL_WITH_DEPRECATED_CIPHERS "Build OpenSSL with deprecated ciphers." OFF )
 option( OPENSSL_WITH_SHARED_LIBRARIES "Build shared version of the libcrypto/libssl libraries." OFF )
 option( OPENSSL_WITH_SHARED_ZLIB "Build OpenSSL with shared version of Zlib." OFF )
+option( OPENSSL_WITH_WEAK_SSL_CIPHERS "Build OpenSSL with weak SSL ciphers." OFF )
 option( OPENSSL_WITH_ZLIB "Build OpenSSL with Zlib." OFF )
 option( OPENSSL_WITHOUT_APPS "Build OpenSSL without apps." OFF )
 option( OPENSSL_WITHOUT_INSTALL_ALL "Build OpenSSL without installing all artifacts." OFF)
@@ -100,7 +101,15 @@ if( NOT OPENSSL_VERSION_PATCH STREQUAL "00" )
   # 96 is the ASCII code of 'a' minus 1
   math( EXPR OPENSSL_VERSION_PATCH_ASCII "${_tmp} + 96" )
   unset( _tmp )
-  string( ASCII "${OPENSSL_VERSION_PATCH_ASCII}" OPENSSL_VERSION_PATCH_STRING )
+  # 122 is the ASCII code of 'z'
+  if( OPENSSL_VERSION_PATCH_ASCII LESS 122 )
+    string( ASCII "${OPENSSL_VERSION_PATCH_ASCII}" OPENSSL_VERSION_PATCH_STRING )
+  else()
+    # the patch number after 'y' is 'za', not 'z'
+    math( EXPR OPENSSL_VERSION_PATCH_ASCII "${OPENSSL_VERSION_PATCH_ASCII} - 25" )
+    string( ASCII "${OPENSSL_VERSION_PATCH_ASCII}" OPENSSL_VERSION_PATCH_STRING )
+    set( OPENSSL_VERSION_PATCH_STRING "z${OPENSSL_VERSION_PATCH_STRING}" )
+  endif()
 endif()
 
 set( OPENSSL_VERSION "${OPENSSL_VERSION_MAJOR}.${OPENSSL_VERSION_MINOR}.${OPENSSL_VERSION_FIX}${OPENSSL_VERSION_PATCH_STRING}" )
@@ -174,10 +183,10 @@ if( MINGW )
 endif()
 
 include( CheckTypeSize )
-check_type_size( "long" LONG_INT )
-check_type_size( "long long" LONG_LONG_INT )
-check_type_size( "int" INT )
-if( HAVE_LONG_INT AND (${LONG_INT} EQUAL 8) )
+check_type_size( "long" SIZEOF_LONG )
+check_type_size( "long long" SIZEOF_LONG_LONG )
+check_type_size( "int" SIZEOF_INT )
+if( HAVE_SIZEOF_LONG AND (${SIZEOF_LONG} EQUAL 8) )
   set( SIXTY_FOUR_BIT_LONG ON )
 elseif( CMAKE_SIZEOF_VOID_P EQUAL 8 )
   set( SIXTY_FOUR_BIT ON )
@@ -205,6 +214,11 @@ set( CONF "
 #define OPENSSL_NO_RC5
 #define OPENSSL_NO_SSL3
 #define OPENSSL_NO_SSL3_METHOD
+${CONF}" )
+endif()
+if( NOT OPENSSL_WITH_WEAK_SSL_CIPHERS )
+set( CONF "
+#define OPENSSL_NO_WEAK_SSL_CIPHERS
 ${CONF}" )
 endif()
 if( OPENSSL_WITH_ZLIB AND ZLIB_FOUND )
