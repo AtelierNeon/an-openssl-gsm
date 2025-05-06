@@ -7,6 +7,12 @@
  * https://www.openssl.org/source/license.html
  */
 
+/*
+ * CMAC low level APIs are deprecated for public use, but still ok for internal
+ * use.
+ */
+#include "internal/deprecated.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -190,13 +196,15 @@ err:
     return ret;
 }
 
+#define OSSL_HEX_CHARS_PER_BYTE 2
 static char *pt(unsigned char *md, unsigned int len)
 {
     unsigned int i;
-    static char buf[80];
+    static char buf[81];
 
-    for (i = 0; i < len; i++)
-        sprintf(&(buf[i * 2]), "%02x", md[i]);
+    for (i = 0; i < len && (i + 1) * OSSL_HEX_CHARS_PER_BYTE < sizeof(buf); i++)
+        BIO_snprintf(buf + i * OSSL_HEX_CHARS_PER_BYTE,
+                     OSSL_HEX_CHARS_PER_BYTE + 1, "%02x", md[i]);
     return buf;
 }
 
