@@ -223,7 +223,6 @@ configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_wrap.h.c
 
 file( READ ${PROJECT_SOURCE_DIR}/include/openssl/configuration.h.cmake CONF )
 set( CONF "
-#define OPENSSL_NO_RFC3779
 #define OPENSSL_NO_EC_NISTP_64_GCC_128
 ${CONF}" )
 if( NOT OPENSSL_WITH_DEPRECATED_CIPHERS )
@@ -242,6 +241,11 @@ endif()
 if( OPENSSL_WITH_ZLIB AND ZLIB_FOUND )
 set( CONF "
 #define ZLIB
+${CONF}" )
+endif()
+if( WIN32 OR APPLE )
+set( CONF "
+#define OPENSSL_NO_KTLS
 ${CONF}" )
 endif()
 file( WRITE ${PROJECT_BINARY_DIR}/include/openssl/configuration.h.cmake "${CONF}" )
