@@ -7,6 +7,8 @@
  * https://www.openssl.org/source/license.html
  */
 
+
+
 #ifndef OPENSSL_ERR_H
 # define OPENSSL_ERR_H
 # pragma once
@@ -384,6 +386,7 @@ DEFINE_LHASH_OF_INTERNAL(ERR_STRING_DATA);
 #define lh_ERR_STRING_DATA_get_down_load(lh) OPENSSL_LH_get_down_load(ossl_check_ERR_STRING_DATA_lh_type(lh))
 #define lh_ERR_STRING_DATA_set_down_load(lh, dl) OPENSSL_LH_set_down_load(ossl_check_ERR_STRING_DATA_lh_type(lh), dl)
 #define lh_ERR_STRING_DATA_doall(lh, dfn) OPENSSL_LH_doall(ossl_check_ERR_STRING_DATA_lh_type(lh), ossl_check_ERR_STRING_DATA_lh_doallfunc_type(dfn))
+
 
 /* 12 lines and some on an 80 column terminal */
 #define ERR_MAX_DATA_SIZE       1024
