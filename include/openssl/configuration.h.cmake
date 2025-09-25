@@ -151,8 +151,8 @@ extern "C" {
 # ifndef OPENSSL_NO_ZSTD
 #  define OPENSSL_NO_ZSTD
 # endif
-# ifndef OPENSSL_NO_STATIC_ENGINE
-#  define OPENSSL_NO_STATIC_ENGINE
+# ifndef OPENSSL_NO_DYNAMIC_ENGINE
+#  define OPENSSL_NO_DYNAMIC_ENGINE
 # endif
 
 

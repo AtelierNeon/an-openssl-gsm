@@ -58,14 +58,20 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/dso_conf.h.cmake
   ${PROJECT_BINARY_DIR}/include/crypto/dso_conf.h )
 
 set( LIBSRC
+  #armcap.c
   asn1_dsa.c bsearch.c comp_methods.c context.c core_algorithm.c core_fetch.c core_namemap.c
   cpt_err.c cpuid.c cryptlib.c ctype.c cversion.c defaults.c der_writer.c deterministic_nonce.c
-  ebcdic.c ex_data.c getenv.c indicator_core.c info.c init.c initthread.c mem.c mem_clr.c
-  mem_sec.c o_dir.c o_fopen.c o_init.c o_str.c o_time.c packet.c param_build.c param_build_set.c
-  params.c params_dup.c params_from_text.c params_idx.c passphrase.c #ppccap.c
+  ebcdic.c ex_data.c getenv.c indicator_core.c info.c init.c initthread.c
+  #loongarchcap.c LPdir_nyi.c LPdir_unix.c LPdir_vms.c LPdir_win.c LPdir_win32.c LPdir_wince.c
+  mem.c mem_clr.c mem_sec.c o_dir.c o_fopen.c o_init.c o_str.c o_time.c packet.c param_build.c
+  param_build_set.c params.c params_dup.c params_from_text.c params_idx.c passphrase.c #ppccap.c
   provider.c provider_child.c provider_conf.c provider_core.c provider_predefined.c punycode.c
-  quic_vlint.c
-  self_test_core.c sleep.c sparse_array.c ssl_err.c time.c threads_lib.c trace.c uid.c )
+  quic_vlint.c #riscvcap.c s390xcap.c
+  self_test_core.c sleep.c #sparcv9cap.c
+  sparse_array.c ssl_err.c threads_lib.c time.c trace.c uid.c )
+if( WIN32 AND BUILD_SHARED_LIBS )
+  set( LIBSRC ${LIBSRC} dllmain.c )
+endif()
 
 include_directories( BEFORE SYSTEM
   ${CMAKE_CURRENT_SOURCE_DIR}/
@@ -87,6 +93,7 @@ endif()
 if( BUILD_SHARED_LIBS )
   add_definitions( -DOPENSSL_BUILD_SHLIBCRYPTO )
 endif()
+add_definitions( -DSTATIC_LEGACY )
 
 macro( add_submodule dir )
     set( options )
@@ -160,8 +167,8 @@ add_submodule ( asn1 a_bitstr.c a_d2i_fp.c a_digest.c a_dup.c a_gentm.c a_i2d_fp
   tasn_fre.c tasn_new.c tasn_prn.c tasn_scn.c tasn_typ.c tasn_utl.c x_algor.c x_bignum.c
   x_info.c x_int64.c x_long.c x_pkey.c x_sig.c x_spki.c x_val.c )
 
-add_submodule ( async arch/async_null.c arch/async_posix.c arch/async_win.c async.c async_err.c
-  async_wait.c )
+add_submodule ( async arch/async_null.c arch/async_posix.c arch/async_win.c
+  async.c async_err.c async_wait.c )
 
 add_submodule ( bf bf_cfb64.c bf_ecb.c bf_enc.c bf_ofb64.c bf_skey.c )
 
@@ -173,7 +180,8 @@ add_submodule ( bio bf_buff.c bf_lbuf.c bf_nbio.c bf_null.c bf_prefix.c bf_readb
 add_submodule ( bn bn_add.c bn_asm.c bn_blind.c bn_const.c bn_conv.c bn_ctx.c bn_depr.c
   bn_dh.c bn_div.c bn_err.c bn_exp.c bn_exp2.c bn_gcd.c bn_gf2m.c bn_intern.c bn_kron.c
   bn_lib.c bn_mod.c bn_mont.c bn_mpi.c bn_mul.c bn_nist.c #bn_ppc.c
-  bn_prime.c bn_print.c bn_rand.c bn_recp.c bn_rsa_fips186_4.c bn_shift.c #bn_sparc.c
+  bn_prime.c bn_print.c bn_rand.c bn_recp.c bn_rsa_fips186_4.c #bn_s390x.c
+  bn_shift.c #bn_sparc.c
   bn_sqr.c bn_sqrt.c bn_srp.c bn_word.c bn_x931p.c rsaz_exp.c rsaz_exp_x2.c )
 
 add_submodule ( buffer buf_err.c buffer.c )
@@ -183,7 +191,7 @@ add_submodule ( camellia camellia.c cmll_cbc.c cmll_cfb.c cmll_ctr.c cmll_ecb.c
 
 add_submodule ( cast c_cfb64.c c_ecb.c c_enc.c c_ofb64.c c_skey.c )
 
-add_submodule ( chacha chacha_enc.c #chacha_ppc.c
+add_submodule ( chacha chacha_enc.c #chacha_ppc.c chacha_riscv.c
   )
 
 add_submodule ( cmac cmac.c )
@@ -205,10 +213,9 @@ add_submodule ( crmf crmf_asn.c crmf_err.c crmf_lib.c crmf_pbm.c )
 add_submodule ( ct ct_b64.c ct_err.c ct_log.c ct_oct.c ct_policy.c ct_prn.c ct_sct.c
   ct_sct_ctx.c ct_vfy.c ct_x509v3.c )
 
-add_submodule ( des cbc_cksm.c cbc_enc.c cfb_enc.c cfb64ede.c cfb64enc.c des_enc.c
-  ecb_enc.c ecb3_enc.c fcrypt.c fcrypt_b.c #ncbc_enc.c
-  ofb_enc.c ofb64ede.c ofb64enc.c pcbc_enc.c qud_cksm.c rand_key.c set_key.c str2key.c
-  xcbc_enc.c )
+add_submodule ( des cbc_cksm.c cbc_enc.c cfb_enc.c cfb64ede.c cfb64enc.c des_enc.c ecb_enc.c
+  ecb3_enc.c fcrypt.c fcrypt_b.c ncbc_enc.c ofb_enc.c ofb64ede.c ofb64enc.c pcbc_enc.c
+  qud_cksm.c rand_key.c set_key.c str2key.c xcbc_enc.c )
 
 add_submodule ( dh dh_ameth.c dh_asn1.c dh_backend.c dh_check.c dh_depr.c dh_err.c dh_gen.c
   dh_group_params.c dh_kdf.c dh_key.c dh_lib.c dh_meth.c dh_pmeth.c dh_prn.c dh_rfc5114.c )
@@ -220,26 +227,27 @@ add_submodule ( dsa dsa_ameth.c dsa_asn1.c dsa_backend.c dsa_check.c dsa_depr.c 
 add_submodule ( dso dso_dl.c dso_dlfcn.c dso_err.c dso_lib.c dso_openssl.c dso_vms.c
   dso_win32.c )
 
-add_submodule ( ec curve25519.c curve448/arch_32/f_impl32.c curve448/arch_64/f_impl64.c
-  curve448/curve448.c curve448/curve448_tables.c curve448/eddsa.c curve448/f_generic.c
-  curve448/scalar.c ec_ameth.c ec_asn1.c ec_backend.c ec_check.c ec_curve.c ec_cvt.c
+add_submodule ( ec curve448/arch_32/f_impl32.c curve448/arch_64/f_impl64.c curve448/curve448.c
+  curve448/curve448_tables.c curve448/eddsa.c curve448/f_generic.c curve448/scalar.c
+  curve25519.c ec_ameth.c ec_asn1.c ec_backend.c ec_check.c ec_curve.c ec_cvt.c
   ec_deprecated.c ec_err.c ec_key.c ec_kmeth.c ec_lib.c ec_mult.c ec_oct.c ec_pmeth.c
   ec_print.c ec2_oct.c ec2_smpl.c ecdh_kdf.c ecdh_ossl.c ecdsa_ossl.c ecdsa_sign.c ecdsa_vrf.c
-  eck_prn.c ecp_mont.c ecp_nist.c #ecp_nistp224.c ecp_nistp256.c ecp_nistp521.c ecp_nistputil.c
-  #ecp_nistz256.c ecp_nistz256_table.c
+  eck_prn.c ecp_mont.c ecp_nist.c #ecp_nistp224.c ecp_nistp256.c ecp_nistp384.c ecp_nistp521.c
+  ecp_nistputil.c #ecp_nistz256.c ecp_nistz256_table.c
   ecp_oct.c #ecp_ppc.c ecp_s390x_nistp.c
-  ecp_smpl.c ecx_backend.c ecx_key.c ecx_meth.c
-  #ecx_s390x.c
+  ecp_sm2p256.c ecp_sm2p256_table.c ecp_smpl.c ecx_backend.c ecx_key.c ecx_meth.c #ecx_s390x.c
   )
 
 add_submodule ( encode_decode decoder_err.c decoder_lib.c decoder_meth.c decoder_pkey.c
   encoder_err.c encoder_lib.c encoder_meth.c encoder_pkey.c )
 
-add_submodule ( engine eng_all.c eng_cnf.c eng_ctrl.c eng_dyn.c eng_err.c eng_fat.c eng_init.c
-  eng_lib.c eng_list.c eng_openssl.c eng_pkey.c eng_rdrand.c eng_table.c tb_asnmth.c
-  tb_cipher.c tb_dh.c tb_digest.c tb_dsa.c tb_eckey.c tb_pkmeth.c tb_rand.c tb_rsa.c )
+add_submodule ( engine eng_all.c eng_cnf.c eng_ctrl.c eng_dyn.c eng_err.c eng_fat.c
+  eng_init.c eng_lib.c eng_list.c eng_openssl.c eng_pkey.c eng_rdrand.c eng_table.c
+  tb_asnmth.c tb_cipher.c tb_dh.c tb_digest.c tb_dsa.c tb_eckey.c tb_pkmeth.c tb_rand.c
+  tb_rsa.c )
 
-add_submodule ( err err.c err_all.c err_all_legacy.c err_blocks.c err_prn.c err_save.c )
+add_submodule ( err err.c err_all.c err_all_legacy.c err_blocks.c err_mark.c err_prn.c
+  err_save.c )
 
 add_submodule ( ess ess_asn1.c ess_err.c ess_lib.c )
 
@@ -250,8 +258,8 @@ add_submodule ( evp asymcipher.c bio_b64.c bio_enc.c bio_md.c bio_ok.c c_allc.c 
   e_rc4_hmac_md5.c e_rc5.c e_seed.c e_sm4.c e_xcbc_d.c ec_ctrl.c ec_support.c encode.c
   evp_cnf.c evp_enc.c evp_err.c evp_fetch.c evp_key.c evp_lib.c evp_pbe.c evp_pkey.c
   evp_rand.c evp_utils.c exchange.c kdf_lib.c kdf_meth.c kem.c keymgmt_lib.c keymgmt_meth.c
-  legacy_blake2.c legacy_md4.c legacy_md5.c legacy_md5_sha1.c legacy_mdc2.c
-  legacy_ripemd.c legacy_sha.c legacy_wp.c m_null.c m_sigver.c mac_lib.c mac_meth.c names.c
+  legacy_blake2.c legacy_md4.c legacy_md5.c legacy_md5_sha1.c legacy_mdc2.c legacy_ripemd.c
+  legacy_sha.c legacy_wp.c m_null.c m_sigver.c mac_lib.c mac_meth.c names.c
   p_dec.c p_enc.c p_legacy.c p_lib.c p_open.c p_seal.c p_sign.c p_verify.c p5_crpt.c
   p5_crpt2.c pbe_scrypt.c pmeth_check.c pmeth_gn.c pmeth_lib.c s_lib.c signature.c
   skeymgmt_meth.c )
@@ -265,7 +273,7 @@ add_submodule ( ffc ffc_backend.c ffc_dh.c ffc_key_generate.c ffc_key_validate.c
 
 add_submodule ( hashtable hashfunc.c hashtable.c )
 
-add_submodule ( hmac hmac.c )
+add_submodule ( hmac hmac.c hmac_s390x.c )
 
 add_submodule ( hpke hpke.c hpke_util.c )
 
@@ -337,7 +345,7 @@ add_submodule ( rsa #rsa_acvp_test_params.c
 
 add_submodule ( seed seed.c seed_cbc.c seed_cfb.c seed_ecb.c seed_ofb.c )
 
-add_submodule ( sha keccak1600.c #sha_ppc.c
+add_submodule ( sha keccak1600.c #sha_ppc.c sha_riscv.c
   sha1_one.c sha1dgst.c sha256.c sha3.c sha512.c )
 
 add_submodule ( siphash siphash.c )
@@ -347,7 +355,8 @@ add_submodule ( slh_dsa slh_adrs.c slh_dsa.c slh_dsa_hash_ctx.c slh_dsa_key.c sl
 
 add_submodule ( sm2 sm2_crypt.c sm2_err.c sm2_key.c sm2_sign.c )
 
-add_submodule ( sm3 legacy_sm3.c sm3.c )
+add_submodule ( sm3 legacy_sm3.c sm3.c #sm3_riscv.c
+  )
 
 add_submodule ( sm4 sm4.c )
 
@@ -358,10 +367,10 @@ add_submodule ( stack stack.c )
 add_submodule ( store store_err.c store_init.c store_lib.c store_meth.c store_register.c
   store_result.c store_strings.c )
 
+add_submodule ( thread api.c arch.c internal.c )
+
 add_submodule ( ts ts_asn1.c ts_conf.c ts_err.c ts_lib.c ts_req_print.c ts_req_utils.c
   ts_rsp_print.c ts_rsp_sign.c ts_rsp_utils.c ts_rsp_verify.c ts_verify_ctx.c )
-
-add_submodule ( thread api.c arch.c internal.c )
 
 add_submodule ( txt_db txt_db.c )
 
@@ -384,19 +393,18 @@ add_submodule ( x509 by_dir.c by_file.c by_store.c pcy_cache.c pcy_data.c pcy_li
 
 add_provider ( . baseprov.c defltprov.c legacyprov.c nullprov.c prov_running.c )
 
-add_provider ( common bio_prov.c capabilities.c der/der_digests_gen.c der/der_dsa_gen.c
-  der/der_dsa_key.c der/der_dsa_sig.c der/der_ec_gen.c der/der_ec_key.c der/der_ec_sig.c
-  der/der_ecx_gen.c der/der_ecx_key.c der/der_ml_dsa_gen.c der/der_ml_dsa_key.c
-  der/der_rsa_gen.c der/der_rsa_key.c der/der_rsa_sig.c der/der_slh_dsa_gen.c
-  der/der_slh_dsa_key.c der/der_sm2_gen.c der/der_sm2_key.c der/der_sm2_sig.c
-  der/der_wrap_gen.c digest_to_nid.c
-  provider_ctx.c provider_err.c provider_seeding.c provider_util.c securitycheck.c
-  securitycheck_default.c #securitycheck_fips.c
+add_provider ( common der/der_digests_gen.c der/der_dsa_gen.c der/der_dsa_key.c der/der_dsa_sig.c
+  der/der_ec_gen.c der/der_ec_key.c der/der_ec_sig.c der/der_ecx_gen.c der/der_ecx_key.c
+  der/der_ml_dsa_gen.c der/der_ml_dsa_key.c der/der_rsa_gen.c der/der_rsa_key.c der/der_rsa_sig.c
+  der/der_slh_dsa_gen.c der/der_slh_dsa_key.c der/der_sm2_gen.c der/der_sm2_key.c der/der_sm2_sig.c
+  der/der_wrap_gen.c
+  bio_prov.c capabilities.c digest_to_nid.c provider_ctx.c provider_err.c provider_seeding.c
+  provider_util.c securitycheck.c securitycheck_default.c #securitycheck_fips.c
   )
 
-add_provider ( fips
-  #fips_entry.c fipsprov.c self_test.c
-  self_test_kats.c )
+#add_provider ( fips
+#  fips_entry.c fipsindicator.c fipsprov.c self_test.c
+#  self_test_kats.c )
 
 add_provider_implementation ( asymciphers rsa_enc.c sm2_enc.c )
 
