@@ -411,21 +411,20 @@ add_provider_implementation ( asymciphers rsa_enc.c sm2_enc.c )
 add_provider_implementation ( ciphers cipher_aes.c cipher_aes_cbc_hmac_sha.c
   cipher_aes_cbc_hmac_sha1_hw.c cipher_aes_cbc_hmac_sha256_hw.c cipher_aes_ccm.c
   cipher_aes_ccm_hw.c cipher_aes_gcm.c cipher_aes_gcm_hw.c cipher_aes_gcm_siv.c
-  cipher_aes_gcm_siv_hw.c cipher_aes_gcm_siv_polyval.c cipher_aes_hw.c
-  cipher_aes_ocb.c cipher_aes_ocb_hw.c cipher_aes_siv.c cipher_aes_siv_hw.c cipher_aes_wrp.c
-  cipher_aes_xts.c cipher_aes_xts_fips.c cipher_aes_xts_hw.c cipher_aria.c cipher_aria_ccm.c
-  cipher_aria_ccm_hw.c cipher_aria_gcm.c cipher_aria_gcm_hw.c cipher_aria_hw.c cipher_blowfish.c
-  cipher_blowfish_hw.c cipher_camellia.c cipher_camellia_hw.c cipher_cast5.c cipher_cast5_hw.c
-  cipher_chacha20.c cipher_chacha20_hw.c cipher_chacha20_poly1305.c cipher_chacha20_poly1305_hw.c
-  cipher_cts.c cipher_des.c cipher_des_hw.c cipher_desx.c cipher_desx_hw.c cipher_idea.c
-  cipher_idea_hw.c cipher_null.c cipher_rc2.c cipher_rc2_hw.c cipher_rc4.c cipher_rc4_hmac_md5.c
+  cipher_aes_gcm_siv_hw.c cipher_aes_gcm_siv_polyval.c cipher_aes_hw.c cipher_aes_ocb.c
+  cipher_aes_ocb_hw.c cipher_aes_siv.c cipher_aes_siv_hw.c cipher_aes_wrp.c cipher_aes_xts.c
+  cipher_aes_xts_fips.c cipher_aes_xts_hw.c cipher_aria.c cipher_aria_ccm.c cipher_aria_ccm_hw.c
+  cipher_aria_gcm.c cipher_aria_gcm_hw.c cipher_aria_hw.c cipher_blowfish.c cipher_blowfish_hw.c
+  cipher_camellia.c cipher_camellia_hw.c cipher_cast5.c cipher_cast5_hw.c cipher_chacha20.c
+  cipher_chacha20_hw.c cipher_chacha20_poly1305.c cipher_chacha20_poly1305_hw.c cipher_cts.c
+  cipher_des.c cipher_des_hw.c cipher_desx.c cipher_desx_hw.c cipher_idea.c cipher_idea_hw.c
+  cipher_null.c cipher_rc2.c cipher_rc2_hw.c cipher_rc4.c cipher_rc4_hmac_md5.c
   cipher_rc4_hmac_md5_hw.c cipher_rc4_hw.c cipher_seed.c cipher_seed_hw.c cipher_sm4.c
   cipher_sm4_ccm.c cipher_sm4_ccm_hw.c cipher_sm4_gcm.c cipher_sm4_gcm_hw.c cipher_sm4_hw.c
-  cipher_sm4_xts.c cipher_sm4_xts_hw.c cipher_tdes.c cipher_tdes_common.c
-  cipher_tdes_default.c cipher_tdes_default_hw.c cipher_tdes_hw.c cipher_tdes_wrap.c
-  cipher_tdes_wrap_hw.c ciphercommon.c ciphercommon_block.c
-  ciphercommon_ccm.c
-  ciphercommon_ccm_hw.c ciphercommon_gcm.c ciphercommon_gcm_hw.c ciphercommon_hw.c )
+  cipher_sm4_xts.c cipher_sm4_xts_hw.c cipher_tdes.c cipher_tdes_common.c cipher_tdes_default.c
+  cipher_tdes_default_hw.c cipher_tdes_hw.c cipher_tdes_wrap.c cipher_tdes_wrap_hw.c
+  ciphercommon.c ciphercommon_block.c ciphercommon_ccm.c ciphercommon_ccm_hw.c ciphercommon_gcm.c
+  ciphercommon_gcm_hw.c ciphercommon_hw.c )
 
 if( OPENSSL_WITH_DEPRECATED_CIPHERS )
   add_provider_implementation ( ciphers cipher_rc5.c cipher_rc5_hw.c )
@@ -441,7 +440,8 @@ endif()
 
 add_provider_implementation ( encode_decode decode_der2key.c decode_epki2pki.c decode_msblob2key.c
   decode_pem2der.c decode_pvk2key.c decode_spki2typespki.c encode_key2any.c encode_key2blob.c
-  encode_key2ms.c encode_key2text.c endecoder_common.c ml_common_codecs.c ml_dsa_codecs.c ml_kem_codecs.c )
+  encode_key2ms.c encode_key2text.c endecoder_common.c ml_common_codecs.c ml_dsa_codecs.c
+  ml_kem_codecs.c )
 
 add_provider_implementation ( exchange dh_exch.c ecdh_exch.c ecx_exch.c kdf_exch.c )
 
@@ -459,10 +459,10 @@ add_provider_implementation ( macs #blake2_mac_impl.c
   blake2b_mac.c blake2s_mac.c cmac_prov.c gmac_prov.c hmac_prov.c kmac_prov.c poly1305_prov.c
   siphash_prov.c )
 
-add_provider_implementation ( rands drbg.c drbg_ctr.c drbg_hash.c drbg_hmac.c seed_src.c
-  seeding/rand_cpu_x86.c seeding/rand_tsc.c seeding/rand_unix.c seeding/rand_win.c
-  #seeding/rand_vms.c seeding/rand_vxworks.c
-  test_rng.c )
+add_provider_implementation ( rands seeding/rand_cpu_arm64.c seeding/rand_cpu_x86.c
+  seeding/rand_tsc.c seeding/rand_unix.c #seeding/rand_vms.c seeding/rand_vxworks.c
+  seeding/rand_win.c
+  drbg.c drbg_ctr.c drbg_hash.c drbg_hmac.c fips_crng_test.c seed_src.c test_rng.c )
 
 add_provider_implementation ( signature dsa_sig.c ecdsa_sig.c eddsa_sig.c mac_legacy_sig.c
   ml_dsa_sig.c rsa_sig.c slh_dsa_sig.c sm2_sig.c )
