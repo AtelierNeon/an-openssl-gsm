@@ -217,7 +217,8 @@ add_submodule ( ct ct_b64.c ct_err.c ct_log.c ct_oct.c ct_policy.c ct_prn.c ct_s
   ct_sct_ctx.c ct_vfy.c ct_x509v3.c )
 
 add_submodule ( des cbc_cksm.c cbc_enc.c cfb_enc.c cfb64ede.c cfb64enc.c des_enc.c ecb_enc.c
-  ecb3_enc.c fcrypt.c fcrypt_b.c ncbc_enc.c ofb_enc.c ofb64ede.c ofb64enc.c pcbc_enc.c
+  ecb3_enc.c fcrypt.c fcrypt_b.c #ncbc_enc.c
+  ofb_enc.c ofb64ede.c ofb64enc.c pcbc_enc.c
   qud_cksm.c rand_key.c set_key.c str2key.c xcbc_enc.c )
 
 add_submodule ( dh dh_ameth.c dh_asn1.c dh_backend.c dh_check.c dh_depr.c dh_err.c dh_gen.c
@@ -237,8 +238,8 @@ add_submodule ( ec curve448/arch_32/f_impl32.c curve448/arch_64/f_impl64.c curve
   ec_print.c ec2_oct.c ec2_smpl.c ecdh_kdf.c ecdh_ossl.c ecdsa_ossl.c ecdsa_sign.c ecdsa_vrf.c
   eck_prn.c ecp_mont.c ecp_nist.c #ecp_nistp224.c ecp_nistp256.c ecp_nistp384.c ecp_nistp521.c
   ecp_nistputil.c #ecp_nistz256.c ecp_nistz256_table.c
-  ecp_oct.c #ecp_ppc.c ecp_s390x_nistp.c
-  ecp_sm2p256.c ecp_sm2p256_table.c ecp_smpl.c ecx_backend.c ecx_key.c ecx_meth.c #ecx_s390x.c
+  ecp_oct.c #ecp_ppc.c ecp_s390x_nistp.c ecp_sm2p256.c
+  ecp_sm2p256_table.c ecp_smpl.c ecx_backend.c ecx_key.c ecx_meth.c #ecx_s390x.c
   )
 
 add_submodule ( encode_decode decoder_err.c decoder_lib.c decoder_meth.c decoder_pkey.c
@@ -427,7 +428,8 @@ add_provider_implementation ( ciphers cipher_aes.c cipher_aes_cbc_hmac_sha.c
   cipher_sm4_xts.c cipher_sm4_xts_hw.c cipher_tdes.c cipher_tdes_common.c cipher_tdes_default.c
   cipher_tdes_default_hw.c cipher_tdes_hw.c cipher_tdes_wrap.c cipher_tdes_wrap_hw.c
   ciphercommon.c ciphercommon_block.c ciphercommon_ccm.c ciphercommon_ccm_hw.c ciphercommon_gcm.c
-  ciphercommon_gcm_hw.c ciphercommon_hw.c )
+  ciphercommon_gcm_hw.c ciphercommon_hw.c
+  ../../../ssl/record/methods/ssl3_cbc.c ../../../ssl/record/methods/tls_pad.c )
 
 if( OPENSSL_WITH_DEPRECATED_CIPHERS )
   add_provider_implementation ( ciphers cipher_rc5.c cipher_rc5_hw.c )

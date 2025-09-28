@@ -28,7 +28,7 @@ if( BUILD_SHARED_LIBS )
 endif()
 
 set( LIBSRC
-  bio_ssl.c d1_lib.c d1_msg.c d1_srtp.c methods.c pqueue.c
+  bio_ssl.c d1_lib.c d1_msg.c d1_srtp.c methods.c pqueue.c priority_queue.c
   s3_enc.c s3_lib.c s3_msg.c ssl_asn1.c ssl_cert.c ssl_cert_comp.c ssl_ciph.c ssl_conf.c
   ssl_err_legacy.c ssl_init.c ssl_lib.c ssl_mcnf.c ssl_rsa.c ssl_rsa_legacy.c ssl_sess.c
   ssl_stat.c ssl_txt.c ssl_utst.c t1_enc.c t1_lib.c t1_trce.c tls13_enc.c tls_depr.c tls_srp.c
@@ -42,16 +42,15 @@ set( LIBSRC
   quic/quic_thread_assist.c quic/quic_tls.c quic/quic_tls_api.c quic/quic_trace.c
   quic/quic_tserver.c quic/quic_txp.c quic/quic_txpim.c quic/quic_types.c quic/quic_wire.c
   quic/quic_wire_pkt.c quic/uint_set.c
-  record/methods/dtls_meth.c #record/methods/ktls_meth.c
-  record/methods/ssl3_cbc.c record/methods/ssl3_meth.c record/methods/tls_common.c
-  record/methods/tls_multib.c record/methods/tls_pad.c record/methods/tls1_meth.c
-  record/methods/tls13_meth.c record/methods/tlsany_meth.c record/rec_layer_d1.c
-  record/rec_layer_s3.c
+  record/methods/dtls_meth.c #record/methods/ktls_meth.c record/methods/ssl3_cbc.c
+  record/methods/ssl3_meth.c record/methods/tls_common.c record/methods/tls_multib.c
+  #record/methods/tls_pad.c
+  record/methods/tls1_meth.c record/methods/tls13_meth.c record/methods/tlsany_meth.c
+  record/rec_layer_d1.c record/rec_layer_s3.c
   rio/poll_builder.c rio/poll_immediate.c rio/rio_notifier.c
   statem/extensions.c statem/extensions_clnt.c statem/extensions_cust.c
   statem/extensions_srvr.c statem/statem.c statem/statem_clnt.c statem/statem_dtls.c
-  statem/statem_lib.c statem/statem_srvr.c
-  )
+  statem/statem_lib.c statem/statem_srvr.c )
 
 include_directories( BEFORE SYSTEM
   ${PROJECT_SOURCE_DIR}/ # e_os.h

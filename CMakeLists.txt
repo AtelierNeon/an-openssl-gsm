@@ -128,6 +128,7 @@ if( WIN32 AND NOT CYGWIN )
   if(BUILD_SHARED_LIBS)
     # avoid conflict: ocsp.h and wincrypt.h
     add_definitions( -D_WINDLL )
+    set( CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON )
   endif()
 endif()
 
