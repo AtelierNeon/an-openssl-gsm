@@ -39,14 +39,14 @@ file( WRITE ${CMAKE_CURRENT_BINARY_DIR}/progs.h "${PROGS_H}" )
 add_definitions( -DMONOLITH )
 
 set( E_SRC
-  lib/app_libctx.c lib/app_params.c lib/app_provider.c lib/app_rand.c lib/app_x509.c lib/apps.c
-  lib/apps_ui.c lib/cmp_mock_srv.c lib/columns.c lib/engine.c lib/engine_loader.c lib/fmt.c
-  lib/http_server.c lib/names.c lib/opt.c lib/s_cb.c lib/s_socket.c lib/tlssrp_depr.c
+  lib/app_libctx.c lib/apps_opt_printf.c lib/app_params.c lib/app_provider.c lib/app_rand.c lib/app_x509.c
+  lib/apps.c lib/apps_ui.c lib/cmp_mock_srv.c lib/columns.c lib/engine.c lib/engine_loader.c lib/fmt.c
+  lib/http_server.c lib/log.c lib/names.c lib/opt.c lib/s_cb.c lib/s_socket.c lib/tlssrp_depr.c
   asn1parse.c ca.c ciphers.c cmp.c cms.c crl.c crl2pkcs7.c dgst.c dhparam.c
   dsa.c dsaparam.c ec.c ecparam.c enc.c engine.c errstr.c fipsinstall.c gendsa.c genpkey.c
   genrsa.c info.c kdf.c list.c mac.c  nseq.c ocsp.c openssl.c passwd.c pkcs12.c pkcs7.c pkcs8.c pkey.c
   pkeyparam.c pkeyutl.c prime.c rand.c rehash.c req.c rsa.c rsautl.c
-  s_client.c s_server.c s_time.c sess_id.c smime.c speed.c spkac.c storeutl.c srp.c
+  s_client.c s_server.c s_time.c sess_id.c skeyutl.c smime.c speed.c spkac.c storeutl.c srp.c
   ts.c verify.c version.c x509.c
   ${CMAKE_CURRENT_BINARY_DIR}/progs.c )
 

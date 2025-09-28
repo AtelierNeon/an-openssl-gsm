@@ -96,8 +96,6 @@ if( NOT ZLIB_FOUND )
 endif()
 
 if( MSVC )
-  include( MSVCRuntime )
-  configure_msvc_runtime()
   set( OPENSSLDIR "C:/ProgramData/openssl/ssl" )
   set( ENGINESDIR "C:/ProgramData/openssl/engines-3" )
   set( MODULESDIR "C:/ProgramData/openssl/ossl-modules" )
@@ -130,6 +128,7 @@ if( WIN32 AND NOT CYGWIN )
   if(BUILD_SHARED_LIBS)
     # avoid conflict: ocsp.h and wincrypt.h
     add_definitions( -D_WINDLL )
+    set( CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON )
   endif()
 endif()
 
@@ -158,6 +157,8 @@ file( COPY ${PROJECT_SOURCE_DIR}/include/internal DESTINATION include )
 file( COPY ${PROJECT_SOURCE_DIR}/include/crypto DESTINATION include )
 file( COPY ${PROJECT_SOURCE_DIR}/include/openssl DESTINATION include )
 
+configure_file( ${PROJECT_SOURCE_DIR}/include/internal/param_names.h.cmake
+  ${PROJECT_BINARY_DIR}/include/internal/param_names.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/asn1.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/asn1.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/asn1t.h.cmake
@@ -168,8 +169,12 @@ configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/cmp.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/cmp.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/cms.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/cms.h )
+configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/comp.h.cmake
+  ${PROJECT_BINARY_DIR}/include/openssl/comp.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/conf.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/conf.h )
+configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/core_names.h.cmake
+  ${PROJECT_BINARY_DIR}/include/openssl/core_names.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/crmf.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/crmf.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/crypto.h.cmake
@@ -202,6 +207,8 @@ configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/ui.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/ui.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/x509.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/x509.h )
+configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/x509_acert.h.cmake
+  ${PROJECT_BINARY_DIR}/include/openssl/x509_acert.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/x509v3.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/x509v3.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/x509_vfy.h.cmake
@@ -214,8 +221,12 @@ configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_ec.h.cma
   ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_ec.h )
 configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_ecx.h.cmake
   ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_ecx.h )
+configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_ml_dsa.h.cmake
+  ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_ml_dsa.h )
 configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_rsa.h.cmake
   ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_rsa.h )
+configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_slh_dsa.h.cmake
+  ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_slh_dsa.h )
 configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_sm2.h.cmake
   ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_sm2.h )
 configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_wrap.h.cmake
@@ -288,11 +299,6 @@ if( NOT OPENSSL_WITHOUT_INSTALL_FILES AND NOT OPENSSL_WITHOUT_INSTALL_ALL )
 
   install( DIRECTORY doc DESTINATION share )
 endif()
-
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY
-)
 
 if( ${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME} )
   add_custom_target(
