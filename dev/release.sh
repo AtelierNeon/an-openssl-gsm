@@ -1,5 +1,5 @@
 #! /bin/bash -e
-# Copyright 2020-2022 The OpenSSL Project Authors. All Rights Reserved.
+# Copyright 2020-2026 The OpenSSL Project Authors. All Rights Reserved.
 #
 # Licensed under the Apache License 2.0 (the "License").  You may not use
 # this file except in compliance with the License.  You can obtain a copy
@@ -228,7 +228,7 @@ elif $force; then
     :
 else
     echo >&2 "Not in master or any recognised release branch"
-    echo >&2 "Please 'git checkout' an approprite branch"
+    echo >&2 "Please 'git checkout' an appropriate branch"
     exit 1
 fi
 orig_HEAD=$(git rev-parse HEAD)
@@ -373,7 +373,7 @@ for fixup in "$HERE/dev/release-aux"/fixup-*-release.pl; do
         perl -pi $fixup $file
 done
 
-$VERBOSE "== Comitting updates and tagging"
+$VERBOSE "== Committing updates and tagging"
 git add -u
 git commit $git_quiet -m "Prepare for release of $release_text"$'\n\nRelease: yes'
 if [ -n "$reviewers" ]; then
@@ -816,7 +816,7 @@ release date in the tar file of any release.
 
 =head1 COPYRIGHT
 
-Copyright 2020-2022 The OpenSSL Project Authors. All Rights Reserved.
+Copyright 2020-2026 The OpenSSL Project Authors. All Rights Reserved.
 
 Licensed under the Apache License 2.0 (the "License").  You may not use
 this file except in compliance with the License.  You can obtain a copy
