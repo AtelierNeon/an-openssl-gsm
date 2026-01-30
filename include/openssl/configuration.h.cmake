@@ -109,6 +109,7 @@ extern "C" {
 # if !defined(OPENSSL_SYS_UEFI)
     /* clang-format off */
 #  undef BN_LLONG
+#  cmakedefine BN_LLONG
     /* clang-format on */
     /* Only one for the following should be defined */
     /* clang-format off */

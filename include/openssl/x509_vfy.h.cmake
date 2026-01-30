@@ -881,7 +881,7 @@ STACK_OF(X509_POLICY_NODE)
 int X509_policy_level_node_count(X509_POLICY_LEVEL *level);
 
 X509_POLICY_NODE *X509_policy_level_get0_node(const X509_POLICY_LEVEL *level,
-w    int i);
+    int i);
 
 const ASN1_OBJECT *X509_policy_node_get0_policy(const X509_POLICY_NODE *node);
 

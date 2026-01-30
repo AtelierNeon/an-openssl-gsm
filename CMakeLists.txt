@@ -204,6 +204,8 @@ configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/x509.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/x509.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/x509v3.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/x509v3.h )
+configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/x509_acert.h.cmake
+  ${PROJECT_BINARY_DIR}/include/openssl/x509_acert.h )
 configure_file( ${PROJECT_SOURCE_DIR}/include/openssl/x509_vfy.h.cmake
   ${PROJECT_BINARY_DIR}/include/openssl/x509_vfy.h )
 configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_digests.h.cmake
@@ -214,8 +216,12 @@ configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_ec.h.cma
   ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_ec.h )
 configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_ecx.h.cmake
   ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_ecx.h )
+configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_ml_dsa.h.cmake
+  ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_ml_dsa.h )
 configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_rsa.h.cmake
   ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_rsa.h )
+configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_slh_dsa.h.cmake
+  ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_slh_dsa.h )
 configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_sm2.h.cmake
   ${PROJECT_BINARY_DIR}/providers/common/include/prov/der_sm2.h )
 configure_file( ${PROJECT_SOURCE_DIR}/providers/common/include/prov/der_wrap.h.cmake
