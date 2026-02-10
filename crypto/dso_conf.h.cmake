@@ -14,20 +14,19 @@
 #ifndef OSSL_CRYPTO_DSO_CONF_H
 #define OSSL_CRYPTO_DSO_CONF_H
 #pragma once
-
-/* clang-format on */
-# cmakedefine HAVE_DLFCN_H
-/* clang-format on */
-/* clang-format off */
-# cmakedefine DSO_NONE
-/* clang-format on */
-/* clang-format off */
-# cmakedefine DSO_WIN32
-/* clang-format on */
-/* clang-format off */
-# cmakedefine DSO_DLFCN
-/* clang-format on */
 /* clang-format off */
 # define DSO_EXTENSION "@DSO_EXTENSION@"
 /* clang-format off */
+/* clang-format off */
+#cmakedefine DSO_NONE
+/* clang-format on */
+/* clang-format off */
+#cmakedefine DSO_WIN32
+/* clang-format on */
+/* clang-format off */
+#cmakedefine DSO_DLFCN
+/* clang-format on */
+/* clang-format on */
+#cmakedefine HAVE_DLFCN_H
+/* clang-format on */
 #endif
