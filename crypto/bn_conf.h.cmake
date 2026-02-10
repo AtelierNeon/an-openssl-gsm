@@ -25,13 +25,13 @@
 
 /* Only one for the following should be defined */
 /* clang-format off */
-#undef SIXTY_FOUR_BIT_LONG
+#cmakedefine SIXTY_FOUR_BIT_LONG
     /* clang-format on */
     /* clang-format off */
-#undef SIXTY_FOUR_BIT
+#cmakedefine SIXTY_FOUR_BIT
     /* clang-format on */
     /* clang-format off */
-#define THIRTY_TWO_BIT
+#cmakedefine THIRTY_TWO_BIT
 /* clang-format on */
 
 #endif
