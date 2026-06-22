@@ -28,7 +28,7 @@ extern "C" {
  */
 
 /* clang-format off */
-# define OPENSSL_CONFIGURED_API 30500
+# define OPENSSL_CONFIGURED_API 30000
 # ifndef OPENSSL_RAND_SEED_OS
 #  define OPENSSL_RAND_SEED_OS
 # endif
@@ -47,20 +47,11 @@ extern "C" {
 # ifndef OPENSSL_NO_ASM
 #  define OPENSSL_NO_ASM
 # endif
-# ifndef OPENSSL_NO_BROTLI
-#  define OPENSSL_NO_BROTLI
-# endif
-# ifndef OPENSSL_NO_BROTLI_DYNAMIC
-#  define OPENSSL_NO_BROTLI_DYNAMIC
-# endif
 # ifndef OPENSSL_NO_CRYPTO_MDEBUG
 #  define OPENSSL_NO_CRYPTO_MDEBUG
 # endif
 # ifndef OPENSSL_NO_CRYPTO_MDEBUG_BACKTRACE
 #  define OPENSSL_NO_CRYPTO_MDEBUG_BACKTRACE
-# endif
-# ifndef OPENSSL_NO_DEMOS
-#  define OPENSSL_NO_DEMOS
 # endif
 # ifndef OPENSSL_NO_DEVCRYPTOENG
 #  define OPENSSL_NO_DEVCRYPTOENG
@@ -73,12 +64,6 @@ extern "C" {
 # endif
 # ifndef OPENSSL_NO_EXTERNAL_TESTS
 #  define OPENSSL_NO_EXTERNAL_TESTS
-# endif
-# ifndef OPENSSL_NO_FIPS_JITTER
-#  define OPENSSL_NO_FIPS_JITTER
-# endif
-# ifndef OPENSSL_NO_FIPS_POST
-#  define OPENSSL_NO_FIPS_POST
 # endif
 # ifndef OPENSSL_NO_FIPS_SECURITYCHECKS
 #  define OPENSSL_NO_FIPS_SECURITYCHECKS
@@ -101,14 +86,8 @@ extern "C" {
 # ifndef OPENSSL_NO_SSL3_METHOD
 #  define OPENSSL_NO_SSL3_METHOD
 # endif
-# ifndef OPENSSL_NO_SSLKEYLOG
-#  define OPENSSL_NO_SSLKEYLOG
-# endif
 # ifndef OPENSSL_NO_TESTS
 #  define OPENSSL_NO_TESTS
-# endif
-# ifndef OPENSSL_NO_TFO
-#  define OPENSSL_NO_TFO
 # endif
 # ifndef OPENSSL_NO_TRACE
 #  define OPENSSL_NO_TRACE
@@ -125,17 +104,8 @@ extern "C" {
 # ifndef OPENSSL_NO_WEAK_SSL_CIPHERS
 #  define OPENSSL_NO_WEAK_SSL_CIPHERS
 # endif
-# ifndef OPENSSL_NO_ZSTD
-#  define OPENSSL_NO_ZSTD
-# endif
-# ifndef OPENSSL_NO_ZSTD_DYNAMIC
-#  define OPENSSL_NO_ZSTD_DYNAMIC
-# endif
 # ifndef OPENSSL_NO_DYNAMIC_ENGINE
 #  define OPENSSL_NO_DYNAMIC_ENGINE
-# endif
-# ifndef OPENSSL_NO_STATIC_ENGINE
-#  define OPENSSL_NO_STATIC_ENGINE
 # endif
 
 /* clang-format on */
