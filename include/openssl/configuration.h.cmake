@@ -182,6 +182,10 @@ extern "C" {
 # define RC4_INT unsigned int
 /* clang-format on */
 
+#if !defined(ZLIB)
+#define OPENSSL_NO_ZLIB
+#endif
+
 #if defined(OPENSSL_NO_COMP) || (defined(OPENSSL_NO_BROTLI) && defined(OPENSSL_NO_ZSTD) && defined(OPENSSL_NO_ZLIB))
 #define OPENSSL_NO_COMP_ALG
 #else
