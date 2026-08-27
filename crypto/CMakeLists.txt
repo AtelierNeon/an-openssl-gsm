@@ -156,8 +156,7 @@ macro( add_provider_implementation dir )
 endmacro( add_provider_implementation )
 
 add_submodule ( aes aes_cbc.c aes_cfb.c aes_core.c aes_ecb.c aes_ige.c aes_misc.c aes_ofb.c
-  aes_wrap.c #aes_x86core.c
-  )
+  aes_wrap.c )
 
 add_submodule ( aria aria.c )
 
