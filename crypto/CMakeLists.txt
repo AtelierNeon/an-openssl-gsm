@@ -330,6 +330,8 @@ add_submodule ( property defn_cache.c property.c property_err.c property_parse.c
 add_submodule ( rand prov_seed.c rand_deprecated.c rand_egd.c rand_err.c rand_lib.c
   rand_meth.c rand_pool.c rand_uniform.c randfile.c )
 
+add_submodule ( rbtree rbtree.c )
+
 add_submodule ( rc2 rc2_cbc.c rc2_ecb.c rc2_skey.c rc2cfb64.c rc2ofb64.c )
 
 add_submodule ( rc4 rc4_enc.c rc4_skey.c )

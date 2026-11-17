@@ -37,8 +37,8 @@ set( LIBSRC
   quic/quic_fifd.c quic/quic_impl.c quic/quic_lcidm.c quic/quic_method.c quic/quic_obj.c
   quic/quic_port.c quic/quic_rcidm.c quic/quic_reactor.c quic/quic_reactor_wait_ctx.c
   quic/quic_record_rx.c quic/quic_record_shared.c quic/quic_record_tx.c quic/quic_record_util.c
-  quic/quic_rstream.c quic/quic_rx_depack.c quic/quic_sf_list.c quic/quic_srt_gen.c
-  quic/quic_srtm.c quic/quic_sstream.c quic/quic_statm.c quic/quic_stream_map.c
+  quic/quic_rstream.c quic/quic_rx_depack.c quic/quic_srt_gen.c quic/quic_srtm.c
+  quic/quic_sstream.c quic/quic_statm.c quic/quic_stream_map.c quic/quic_strm_reas.c
   quic/quic_thread_assist.c quic/quic_tls.c quic/quic_tls_api.c quic/quic_trace.c
   quic/quic_tserver.c quic/quic_txp.c quic/quic_txpim.c quic/quic_types.c quic/quic_wire.c
   quic/quic_wire_pkt.c quic/uint_set.c
